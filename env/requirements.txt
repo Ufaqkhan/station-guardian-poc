@@ -1,0 +1,27 @@
+# Main environment (python 3.11): Wan2.2 worker, Z-Image-Turbo, registration, compositing, assembly.
+# Versions = the environment the PoC was made with (CUDA 12.8 wheels). Install:
+#   pip install -r env/requirements.txt
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.9.1
+torchvision==0.24.1
+diffusers==0.41.0
+transformers==5.19.0
+accelerate==1.15.0
+safetensors==0.8.0
+huggingface_hub==1.33.0
+hf-xet==1.7.0
+peft==0.21.2
+tokenizers==0.23.3
+sentencepiece==0.2.2
+ftfy==6.3.1
+regex
+einops==0.8.2
+numpy==2.4.6
+pillow==12.3.0
+opencv-python-headless==5.0.0.93
+scipy==1.17.1
+# used by SeedVR2 (its venv sees this environment through --system-site-packages)
+omegaconf==2.4.0
+tqdm==4.70.1
+psutil==7.2.2
+matplotlib==3.11.2

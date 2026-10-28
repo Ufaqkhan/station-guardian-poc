@@ -1,0 +1,54 @@
+# ---- data and results: live in SG_ROOT (default: this folder), copied with setup/data_bundle.sh, never in git ----
+/work/
+/chain/
+/output/
+/logs/
+/archive/
+/OLD_ROOT.txt
+*.tar
+*.tar.list
+
+# ---- models and third-party code (setup/install_envs.sh, setup/download_weights.sh) ----
+/weights/
+/tools/
+/third_party/
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.gguf
+
+# ---- media (videos, frames, arrays) ----
+*.mkv
+*.mp4
+*.mov
+*.avi
+*.npz
+*.npy
+*.png
+*.jpg
+*.jpeg
+*.webp
+# small figures for the docs may be added on purpose:
+!docs/media/*.jpg
+!docs/media/*.png
+
+# ---- partner material and secrets: do not commit ----
+*.docx
+*.pdf
+View-Display*
+/config/env.sh
+.env
+*.token
+.hf_token
+.netrc
+
+# ---- python / editors ----
+__pycache__/
+*.pyc
+.pydeps/
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
