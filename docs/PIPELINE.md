@@ -28,9 +28,9 @@ The queue is the folder `work/queue/`: one JSON per request, claimed by atomic r
 
 | What | Command |
 |---|---|
-| Remove the burned-in timestamp from the real frame | `$SG_PY $S/clean_osd.py --seeds 1 2 3` (reads `work/plates/real/view_original.png`) |
-| Opening frame: walk-in take, cut-out, place on the seat | `submit.py --beat P0a --start work/plates/plate.png`, then `move_seated.py` |
-| Or inpaint a person with Z-Image-Turbo | `make_proxy.py` (scaled stand-in) then `make_start.py --init ... --strength 0.82` |
+| Plate: remove the burned-in timestamp from the real frame | `$SG_PY $S/make_real_plate.py --src View-Display.jpeg` |
+| Opening frame: walk-in take, frame + SAM3 mask, place on the seat | `submit.py --beat P0a --tag g1 --start work/plates/plate.png --seeds 1 2 3`, `take_frame.py ... --idx 80 --mask "woman in a red coat sitting on a bench"`, `move_seated.py --frac 0.20` (full commands in the README, section 2.3) |
+| (first version, optional) inpaint with Z-Image-Turbo | `make_proxy.py` (scaled stand-in) then `make_start.py --init ... --strength 0.82`; `clean_osd.py` |
 | Register plate and start in the chain | `$SG_PY $S/chain.py init --plate work/plates/plate.png --start work/start/real/A01_start.png` |
 
 ## 2. One beat
@@ -39,6 +39,8 @@ The queue is the folder `work/queue/`: one JSON per request, claimed by atomic r
 # a. takes: one request per seed, from the previous beat's corrected last frame
 $SG_PY $S/submit.py --beat A06 --start chain/A05_last_cc.png --seeds 1 2 3 4 5 6 --tag g1
 #    prompt = story.py prompt for the beat; --extra "..." appends, --prompt "..." replaces
+
+#    or re-run the exact request of the delivered take:  $SG_PY $S/replay.py A06 [--seeds ...]
 
 # b. review in the final fixed view (registered to the plate), pick the take
 $SG_PY $S/rev.py A06 g1 --n 6 --box 790 110 1070 400 --idx 16 32 48 64 80     # grid + parallax per take
@@ -56,6 +58,7 @@ corrected, start of the next beat), `work/lock/A06/` (homographies, masks, matte
 Build the end frame in the fixed view, then generate the motion between the two frames (first + last frame mode):
 
 ```bash
+$SG_PY $S/take_frame.py work/beats/A14/g1/A14_g1_s6.mkv --idx 28 --reg --out work/keyframes/real/A14/s6_f28_reg.png
 $SG_PY $S/end_from_take.py --src work/keyframes/real/A14/s6_f28_reg.png --out work/keyframes/real/A14/A14_end.png
 $SG_PY $S/submit.py --beat A14 --start chain/A13_last_cc.png --last work/keyframes/real/A14/A14_end.png --seeds 1 2 3 4 --tag p1
 ```

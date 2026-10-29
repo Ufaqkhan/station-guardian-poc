@@ -1,6 +1,6 @@
 # Setting up on a new server
 
-About 1–2 hours, most of it downloads (~120 GB of models, plus 0.01–11 GB of data from the old server).
+About 1–2 hours, most of it downloads (~90 GB of models, plus 0.01–11 GB of data from the old server).
 
 ## 1. Code
 
@@ -39,7 +39,7 @@ Edit `config/env.sh`:
 - `SG_PY`, `SG_SAM3_PY`: the python paths printed by `install_envs.sh`
   (e.g. `~/miniconda3/envs/sg/bin/python`, `~/miniconda3/envs/sg-sam3/bin/python`).
 - `SG_ROOT`: where takes and videos go (needs ~60 GB for a full story). Default: the repository folder.
-- `HF_HOME`: where the models are downloaded (~120 GB).
+- `HF_HOME`: where the models are downloaded (~90 GB).
 - `SG_SLURM_ACCOUNT`, `SG_SLURM_PARTITION`, `SG_SLURM_QOS`: your cluster's values (leave empty if not needed).
 
 `config/env.sh` is git-ignored; every shell script loads it through `config/load_env.sh`, and the Python scripts read
@@ -50,7 +50,7 @@ the same variables (`scripts/sg_paths.py`).
 ```bash
 source config/load_env.sh
 "$(dirname "$SG_PY")/hf" auth login   # Hugging Face token; needed for SAM3 (gated)
-setup/download_weights.sh            # or one at a time: wan | zimage | sam3 | seedvr2
+setup/download_weights.sh            # or one at a time: wan | sam3 | seedvr2  (zimage: optional)
 ```
 
 | Model | Hugging Face repo | Size |
@@ -58,7 +58,7 @@ setup/download_weights.sh            # or one at a time: wan | zimage | sam3 | s
 | Wan2.2-I2V-A14B experts (fp16) | `Comfy-Org/Wan_2.2_ComfyUI_Repackaged` (2 files) | 54 GB |
 | LightX2V 4-step adapters | `lightx2v/Wan2.2-Distill-Loras` (2 files, `*_4step_1022`) | 1.3 GB |
 | Wan2.2 text encoder, VAE, configs | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` (no transformer weights) | 12 GB |
-| Z-Image-Turbo | `Tongyi-MAI/Z-Image-Turbo` | 31 GB |
+| Z-Image-Turbo (optional, not used by the delivered version) | `Tongyi-MAI/Z-Image-Turbo` | 31 GB |
 | SAM3 | `facebook/sam3` → `sam3.pt` (accept the licence on the model page first) | 3.3 GB |
 | SeedVR2-7B + VAE | `numz/SeedVR2_comfyUI` (`seedvr2_ema_7b_fp16`, `ema_vae_fp16`) | 16 GB |
 

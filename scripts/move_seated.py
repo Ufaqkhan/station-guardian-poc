@@ -57,6 +57,8 @@ def main():
     gain = 1.0 - S[..., None] * 0.92 * (1.0 - compose.RATIO[None, None, :])
     # the bench's near armrest and front slats stay IN FRONT of her (occlusion), as in the plate
     occ = cv2.imread(os.path.join(ROOT, "work", "plates", "real", "bench_front_mask.png"), 0)
+    if occ is None:
+        print("WARNING: work/plates/real/bench_front_mask.png missing: the bench will not cover her (data bundle 'base')")
     occ = (occ > 127).astype(np.float32) if occ is not None else np.zeros((H, W), np.float32)
     alpha = cv2.GaussianBlur(mw, (0, 0), 0.8) * (1 - occ)
     alpha = alpha[..., None]

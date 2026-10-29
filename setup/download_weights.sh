@@ -1,8 +1,8 @@
 #!/bin/bash
-# Download every model the pipeline uses (about 120 GB in total). Uses the `hf` CLI from huggingface_hub
+# Download the models the pipeline uses (about 90 GB; +31 GB with the optional Z-Image-Turbo). Uses the `hf` CLI from huggingface_hub
 # (in the main environment). Files go to the Hugging Face cache ($HF_HOME/hub) except SAM3 and SeedVR2.
-#   setup/download_weights.sh            # all
-#   setup/download_weights.sh wan        # only: wan | zimage | sam3 | seedvr2
+#   setup/download_weights.sh            # all models used by the delivered version (wan, sam3, seedvr2)
+#   setup/download_weights.sh wan        # only one: wan | sam3 | seedvr2 | zimage (optional, first-version tools)
 # SAM3 is gated: accept the licence on https://huggingface.co/facebook/sam3 and run `hf auth login` first.
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/config/load_env.sh"
@@ -24,8 +24,8 @@ if [[ $what == all || $what == wan ]]; then
     --include "model_index.json" "scheduler/*" "text_encoder/*" "tokenizer/*" "vae/*" \
               "transformer/config.json" "transformer_2/config.json"
 fi
-if [[ $what == all || $what == zimage ]]; then
-  # Z-Image-Turbo: opening still / plate inpainting (make_start.py, clean_osd.py, make_plate.py)
+if [[ $what == zimage ]]; then
+  # Z-Image-Turbo (optional): only for the first-version tools make_start.py, clean_osd.py, make_plate.py
   "$HFCLI" download Tongyi-MAI/Z-Image-Turbo --exclude "assets/*"
 fi
 if [[ $what == all || $what == sam3 ]]; then

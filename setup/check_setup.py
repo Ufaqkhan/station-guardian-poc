@@ -77,7 +77,9 @@ W = [("Comfy-Org/Wan_2.2_ComfyUI_Repackaged", "split_files/diffusion_models/wan2
      ("Tongyi-MAI/Z-Image-Turbo", "model_index.json"),
      ("Tongyi-MAI/Z-Image-Turbo", "transformer/diffusion_pytorch_model.safetensors.index.json")]
 for repo, rel in W:
-    report(hf_file(repo, rel), f"{repo}/{rel}", hint="setup/download_weights.sh")
+    opt = repo.startswith("Tongyi-MAI")      # Z-Image-Turbo: optional (first-version tools only)
+    report(hf_file(repo, rel), f"{repo}/{rel}" + (" (optional)" if opt else ""),
+           hint="setup/download_weights.sh" + (" zimage" if opt else ""), warn=opt)
 
 # 4. SAM3 (separate environment; runs on the worker GPU)
 report(os.path.exists(P.SAM3_CKPT), f"SAM3 checkpoint {P.SAM3_CKPT}", hint="setup/download_weights.sh sam3")
